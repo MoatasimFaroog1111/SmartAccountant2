@@ -88,7 +88,7 @@ def main():
         return
 
     if "executor" not in st.session_state:
-        llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0, convert_system_message_to_human=True)
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, convert_system_message_to_human=True)
         
         tools = [
             Tool(name="search_partner", func=engine.search_partner, description="البحث عن عميل أو مورد بالاسم أو الضريبة في أودو"),
