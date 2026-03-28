@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import AgentExecutor, create_openai_functions_agent
 from langchain_core.tools import Tool
-from langchain import hub
+from langsmith import pull_prompt
 import nest_asyncio
 
 load_dotenv()
@@ -88,14 +88,14 @@ def main():
         return
 
     if "executor" not in st.session_state:
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, convert_system_message_to_human=True)
+        llm = ChatGoogleGenerativeAI(model="gemini-1.0-pro", temperature=0, convert_system_message_to_human=True)
         
         tools = [
             Tool(name="search_partner", func=engine.search_partner, description="البحث عن عميل أو مورد بالاسم أو الضريبة في أودو"),
             Tool(name="create_invoice", func=engine.create_invoice, description="إنشاء فاتورة مبيعات جديدة. المدخلات: 'ID المورد، المبلغ، الوصف'")
         ]
         
-        prompt = hub.pull("hwchase17/openai-functions-agent")
+        prompt = pull_prompt("hwchase17/openai-functions-agent")
         agent = create_openai_functions_agent(llm, tools, prompt)
         st.session_state.executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
         st.session_state.messages = []
